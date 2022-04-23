@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><meta charset="utf-8" />
+        <link rel="stylesheet" href="styles2.css">
+        <title>Khaled's Pixel Art Maker</title>
+    
+    </head>
+    <body>
+        <div class="rows">
+            <div class="columns">
+                <div class="input-container">
+
+                    <h4>Choose Canavs Size</h4>
+
+                    <form id="form" class="size-picker">
+                        Height: <input type="number" class="height"  min="0" max="100" value="50" ><br><br>
+                        Width:&nbsp;&nbsp;<input type="number" class="width" min="0" max="100" value="50" ><br><br>
+                        <input type="submit" class="submitBtn" value="Submit">
+
+                    </form>
+
+                    <h4>SELECT COLOR</h4>
+                    <input type="color" class="color-picker" value="#09b0b3">
+
+                    <br><br>
+                    <input type="button" class="fillBtn" value="Fill">
+                    <input type="button" class="drawBtn" value="Draw">
+                    <input type="button" class="eraseBtn" value="Erase"><br><br>
+
+                    <input type="button" class="clear" value="Clear Canvas"><br><br>
+                    
+                </div>
+            </div>
+            <div class="columns">
+                <table class="canvas"></table>
+            </div>
+        </div>
+        <script src="script2.js"></script>
+    </body>
+</html>
