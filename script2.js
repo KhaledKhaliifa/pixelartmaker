@@ -1,4 +1,3 @@
-
 const sizePicker = document.querySelector('.size-picker');
 const pixelCanvas = document.querySelector('.canvas');
 const draw = document.querySelector('.drawBtn');
@@ -6,6 +5,10 @@ const fill = document.querySelector('.fillBtn');
 const erase = document.querySelector('.eraseBtn');
 const clearBtn = document.querySelector('.clear');
 const exportBtn = document.querySelector('.export');
+const eyeDropper = document.querySelector('.eyeDropper');
+const showhide = document.querySelector('.showhide');
+
+var state = "draw";
 
 //Function that creates the grid, first call takes the origianl values of height and width (25,25)
 function makeGrid(){
@@ -22,8 +25,10 @@ function makeGrid(){
             let gridcell = document.createElement('td');
             
             gridcell.addEventListener('mousedown',function() {
-                var myColor = document.querySelector('.color-picker').value;
-                gridcell.style.backgroundColor = myColor;
+                if(state =="draw"){
+                    var myColor = document.querySelector('.color-picker').value;
+                    gridcell.style.backgroundColor = myColor;
+                }
             });
             gridrow.appendChild(gridcell);
         }
@@ -45,29 +50,33 @@ let pressed = false;
 
 //Drag draw on the canvas possiblity
 pixelCanvas.addEventListener('mousedown', function(event){
-    pressed = true;
-	pixelCanvas.addEventListener('mouseup', function() {
-		pressed = false;
-	});
-    pixelCanvas.addEventListener('mouseleave', function() {
-        pressed = false;
-    });
- 
-    pixelCanvas.addEventListener('mouseover', function(e) {
+    if(state == "draw"){
+        pressed = true;
+        pixelCanvas.addEventListener('mouseup', function() {
+            pressed = false;
+        });
+        pixelCanvas.addEventListener('mouseleave', function() {
+            pressed = false;
+        });
 
-  	if (pressed) {
-      if (e.target.tagName.toLowerCase() === 'td') {
-      	e.target.style.backgroundColor = document.querySelector('.color-picker').value;
-      }
-    }
+    
+        pixelCanvas.addEventListener('mouseover', function(e) {
+
+        if (pressed) {
+        if (e.target.tagName.toLowerCase() === 'td') {
+            e.target.style.backgroundColor = document.querySelector('.color-picker').value;
+        }
+        }
   });
-});
+}});
 
 //Fill canvas function
 fill.addEventListener('click',function(e){
     e.preventDefault();
-    document.querySelectorAll('td').forEach(element => element.style.backgroundColor= document.querySelector('.color-picker').value);
-
+    var response = confirm("Mota2akked yabni?");
+    if(response){
+        document.querySelectorAll('td').forEach(element => element.style.backgroundColor= document.querySelector('.color-picker').value);
+    }
 });
 
 
@@ -96,31 +105,74 @@ erase.addEventListener('click',function(e){
 //Draw button function
 draw.addEventListener('click', function(e){
     pixelCanvas.addEventListener('mousedown', function(event){
-        pressed = true;
-        pixelCanvas.addEventListener('mouseup', function() {
-            pressed = false;
-        });
-        // Ensures cells won't be colored if grid is left while pointer is held down
-        pixelCanvas.addEventListener('mouseleave', function() {
-            pressed = false;
-        });
-     
-        pixelCanvas.addEventListener('mouseover', function(e) {
+        state = "draw";
+        if(state == "draw"){
+            pressed = true;
+            pixelCanvas.addEventListener('mouseup', function() {
+                pressed = false;
+            });
+            pixelCanvas.addEventListener('mouseleave', function() {
+                pressed = false;
+            });
+            pixelCanvas.addEventListener('mouseleave', function() {
+                pressed = false;
+            });
+        
+            pixelCanvas.addEventListener('mouseover', function(e) {
     
-          if (pressed) {
-          // 'TD' capitalized because element.tagName returns upper case for DOM trees that represent HTML elements
-          if (e.target.tagName.toLowerCase() === 'td') {
-              e.target.style.backgroundColor = document.querySelector('.color-picker').value;
-          }
-        }
+            if (pressed) {
+            if (e.target.tagName.toLowerCase() === 'td') {
+                e.target.style.backgroundColor = document.querySelector('.color-picker').value;
+            }
+            }
       });
-    });
-});
+}})});
 clearBtn.addEventListener('click', function(e){
     e.preventDefault();
-    var response = confirm("Are you sure ?");
+    var response = confirm("Mota2akked yabni?");
     if(response){
         document.querySelectorAll('td').forEach(element => element.style.backgroundColor= null);
     }
 });
+eyeDropper.addEventListener('click', function(e){
 
+    state="eye";
+    e.preventDefault();
+    pixelCanvas.addEventListener('click',function(e){
+        if(e.target.tagName.toLowerCase() === 'td'){
+            if(e.target.style.backgroundColor){
+                let mycolor = e.target.style.backgroundColor;
+                console.log(mycolor);
+                var rgb = mycolor.replace(/^rgba?\(|\s+|\)$/g,'').split(',');
+                console.log(rgb);
+                for(var i =0;i<rgb.length;i++){
+                    rgb[i]= Number(rgb[i]);
+                }
+                for(var i =0;i<rgb.length;i++){
+                    rgb[i] = rgb[i].toString(16);
+                }
+                for(var i = 0;i<rgb.length;i++){
+                    if(rgb[i].length == 1){
+                        rgb[i]="0"+rgb[i];
+                    }
+                }
+                console.log(rgb);
+                final = `#${rgb[0]}${rgb[1]}${rgb[2]}`;
+                console.log(final);
+                document.querySelector('.color-picker').value = final;
+            }
+        }
+        
+    })
+})
+let shown = true;
+showhide.addEventListener('click', function(){
+    if(shown){
+        document.querySelectorAll('td').forEach(element => element.style.border= "1px dotted silver");
+        shown = false;
+    }
+    else{
+        document.querySelectorAll('td').forEach(element => element.style.border= "none");
+        shown=true;
+    }
+})
