@@ -7,3 +7,6 @@ Then the grid is remade and all the changes are cleared.
 Then we have 3 buttons: Draw, Erase, and Fill which allows the user to either draw on the canvas using the selected color, erase the color, or fill the entire canvas the selected color.
 
 The user can also click and drag to draw not just click each pixel individually.
+
+*Note*
+After using the eye drop button, you need to click on draw again to be able to draw.
